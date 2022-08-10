@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d57b4e4d-f06d-473d-a6f7-cad00e6e4abf" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Scenario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Scenario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Bus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/PublicTransport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PublicTransport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Taxi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Taxi.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

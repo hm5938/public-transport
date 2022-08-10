@@ -1,9 +1,9 @@
 import java.util.UUID;
 
 public class Taxi extends PublicTransport {
-    private final static int PRINT_1=0;
-    private final static int PRINT_2=1;
-    private final static int PRINT_3=2;
+    private final static int INFO_BASIC=0;
+    private final static int INFO_BOARDING=1;
+    private final static int INFO_FARE=2;
 
     private static final int FARE_MINIMUN = 3000;
     private static final int FARE_DISTANCE = 1000;
@@ -14,40 +14,40 @@ public class Taxi extends PublicTransport {
 
 
     Taxi() {
-        max_passenger = 4;
-        fuel_volume = 100;
-        NUMBER = UUID.randomUUID();
+        setMax_passenger(4);
+        setFuel_volume(100);
+        setNUMBER(UUID.randomUUID());
         distance = 0;
-        fare = 0;
-        state = "일반";
-        print(0);
+        setFare(0);
+        setState("일반");
+        print(INFO_BASIC);
     }
     @Override
     public void print(int i) {
         String[] str = new String[3];
 
-        str[0] =
+        str[INFO_BASIC] =
                 "---------------------------"+
-                        "\n택시번호 : " + NUMBER +
-                "\n주유량 : " + fuel_volume +
-                "\n상태 : " + state+
+                        "\n택시번호 : " + getNUMBER() +
+                "\n주유량 : " + getFuel_volume() +
+                "\n상태 : " + getState()+
         "\n---------------------------";
 
-        str[1] =
+        str[INFO_BOARDING] =
                 "---------------------------"+
-                        "\n탐승 승객 수 : " + passenger +
-                        "\n잔여 승객 수 : " + (max_passenger - passenger) +
+                        "\n탐승 승객 수 : " + getPassenger() +
+                        "\n잔여 승객 수 : " + (getMax_passenger() - getPassenger()) +
                         "\n기본 요금 확인 : " + FARE_MINIMUN +
                         "\n목적지 : " + destination +
                         "\n목적지 까지 거리 : " + distance +
-                        "\n지불할 요금 : " + fare+
+                        "\n지불할 요금 : " + getFare()+
                         "\n---------------------------";
 
 
-        str[2] =
+        str[INFO_FARE] =
                 "---------------------------"+
-                        "\n주유량 : " + fuel_volume +
-                        "\n상태 : " + state +
+                        "\n주유량 : " + getFuel_volume() +
+                        "\n상태 : " + getState() +
                         "\n누적 요금 : " + fare_sum+
                         "\n---------------------------";
         System.out.println(str[i]);
@@ -55,10 +55,10 @@ public class Taxi extends PublicTransport {
 
     @Override
     public void refuel(double volume) {
-        if(fuel_volume+volume>=0){
-            fuel_volume += volume;
-            if(fuel_volume<10){
-                state = "운행불가";
+        if(getFuel_volume()+volume>=0){
+            setFuel_volume(getFuel_volume()+volume);
+            if(getFuel_volume()<10){
+                setState("운행불가");
             }
         }else{
             alert("연료가 남아있지않아 명령을 수행할 수 없습니다.");
@@ -66,16 +66,16 @@ public class Taxi extends PublicTransport {
     }
 
     public void boarding(int passenger, String destination, double distance) {
-        if (state.equals("일반")) {
-            if(max_passenger<passenger){
-                alert("최대 승객 수 초과. 탐승할 수 있는 인원은 최대 " +max_passenger +"명 입니다.");
+        if (getState().equals("일반")) {
+            if(getMax_passenger()<passenger){
+                alert("최대 승객 수 초과. 탐승할 수 있는 인원은 최대 " +getMax_passenger() +"명 입니다.");
             }else{
-                this.passenger = passenger;
+                setPassenger(passenger);
                 this.destination=destination;
                 this.distance = distance;
                 CalculateFare();
-                state = "운행중";
-                print(1);
+                setState("운행중");
+                print(INFO_BOARDING);
             }
         } else {
             alert("현재 탐승불가 상태입니다.");
@@ -85,27 +85,27 @@ public class Taxi extends PublicTransport {
 
     public void CalculateFare() {
         if (distance > DISTANCE_BASIC) {
-            fare = FARE_MINIMUN + (distance - DISTANCE_BASIC) * FARE_DISTANCE;
+            setFare(FARE_MINIMUN + (distance - DISTANCE_BASIC) * FARE_DISTANCE);
         } else {
-            fare = FARE_MINIMUN;
+            setFare(FARE_MINIMUN);
         }
 
     }
 
     public void FarePayment() {
-        if(!state.equals("일반")){
-            System.out.println("최종 요금은 " + fare + "원 입니다.");
-            fare_sum+=fare;
-            passenger =0;
+        if(!getState().equals("일반")){
+            System.out.println("최종 요금은 " + getFare() + "원 입니다.");
+            fare_sum+=getFare();
+            setPassenger(0);
             distance =0;
             destination="";
-            fare=0;
+            setFare(0);
 
-           if(state.equals("운행중")) state = "일반";
+           if(getState().equals("운행중")) setState("일반");
         }else{
             alert("현재 승객이 타고있지 않습니다.");
         }
-        print(2);
-        if(fuel_volume<10) alert("주유 필요");
+        print(INFO_FARE);
+        if(getFuel_volume()<10) alert("주유 필요");
     }
 }
