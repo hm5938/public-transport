@@ -1,6 +1,10 @@
 import java.util.UUID;
 
 public class Taxi extends PublicTransport {
+    private final static int PRINT_1=0;
+    private final static int PRINT_2=1;
+    private final static int PRINT_3=2;
+
     private static final int FARE_MINIMUN = 3000;
     private static final int FARE_DISTANCE = 1000;
     private static final double DISTANCE_BASIC = 1;
@@ -15,45 +19,73 @@ public class Taxi extends PublicTransport {
         NUMBER = UUID.randomUUID();
         distance = 0;
         fare = 0;
+        state = "일반";
+        print(0);
     }
-
+    @Override
     public void print(int i) {
         String[] str = new String[3];
 
-        str[0] = "택시번호 : " + NUMBER +
-                "주유량 : " + fuel_volume +
-                "상태 : " + state;
+        str[0] =
+                "---------------------------"+
+                        "\n택시번호 : " + NUMBER +
+                "\n주유량 : " + fuel_volume +
+                "\n상태 : " + state+
+        "\n---------------------------";
 
         str[1] =
-                "탐승 승객 수 : " + passenger +
-                        "잔여 승객 수 : " + (max_passenger - passenger) +
-                        "기본 요금 확인 : " + FARE_MINIMUN +
-                        "목적지 : " + destination +
-                        "목적지 까지 거리" + distance +
-                        "지불할 요금" + fare;
+                "---------------------------"+
+                        "\n탐승 승객 수 : " + passenger +
+                        "\n잔여 승객 수 : " + (max_passenger - passenger) +
+                        "\n기본 요금 확인 : " + FARE_MINIMUN +
+                        "\n목적지 : " + destination +
+                        "\n목적지 까지 거리 : " + distance +
+                        "\n지불할 요금 : " + fare+
+                        "\n---------------------------";
 
 
         str[2] =
-                "주유량 : " + fuel_volume +
-                        "상태 : " + state +
-                        "누적 요금 : " + fare_sum;
+                "---------------------------"+
+                        "\n주유량 : " + fuel_volume +
+                        "\n상태 : " + state +
+                        "\n누적 요금 : " + fare_sum+
+                        "\n---------------------------";
         System.out.println(str[i]);
     }
 
-
     @Override
-    public void Boarding() {
+    public void refuel(double volume) {
+        if(fuel_volume+volume>=0){
+            fuel_volume += volume;
+            if(fuel_volume<10){
+                state = "운행불가";
+            }
+        }else{
+            alert("연료가 남아있지않아 명령을 수행할 수 없습니다.");
+        }
+    }
+
+    public void boarding(int passenger, String destination, double distance) {
         if (state.equals("일반")) {
-            state = "운행중";
+            if(max_passenger<passenger){
+                alert("최대 승객 수 초과. 탐승할 수 있는 인원은 최대 " +max_passenger +"명 입니다.");
+            }else{
+                this.passenger = passenger;
+                this.destination=destination;
+                this.distance = distance;
+                CalculateFare();
+                state = "운행중";
+                print(1);
+            }
         } else {
-            System.out.println("탐승불가입니다.");
+            alert("현재 탐승불가 상태입니다.");
         }
 
     }
 
     public void CalculateFare() {
         if (distance > DISTANCE_BASIC) {
-            fare = FARE_MINIMUN + (distance - DISTANCE_BASIC) * 1000;
+            fare = FARE_MINIMUN + (distance - DISTANCE_BASIC) * FARE_DISTANCE;
         } else {
             fare = FARE_MINIMUN;
         }
@@ -61,15 +93,19 @@ public class Taxi extends PublicTransport {
     }
 
     public void FarePayment() {
-        System.out.println("최종 요금은 " + fare + "원 입니다.");
+        if(!state.equals("일반")){
+            System.out.println("최종 요금은 " + fare + "원 입니다.");
+            fare_sum+=fare;
+            passenger =0;
+            distance =0;
+            destination="";
+            fare=0;
+
+           if(state.equals("운행중")) state = "일반";
+        }else{
+            alert("현재 승객이 타고있지 않습니다.");
+        }
+        print(2);
+        if(fuel_volume<10) alert("주유 필요");
     }
 }
-//1. 택시 번호
-//2. 주유량
-//3. 현재속도
-//4. 목적지
-//5. 기본거리
-//6. 목적지까지 거리
-//7. 기본 요금
-//8. 거리당 요금
-//9. 상태 (운행 중, 일반)
