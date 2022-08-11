@@ -52,6 +52,17 @@ public class Taxi extends PublicTransport {
                         "\n---------------------------";
         System.out.println(str[i]);
     }
+    @Override
+    public void changeState() {
+        if (getState().equals("일반")) {
+            setState("운행중");
+        } else {
+            setState("일반");
+        }
+        if(getFuel_volume()<10){
+            setState("운행불가");
+        }
+    }
 
     @Override
     public void refuel(double volume) {
@@ -100,6 +111,7 @@ public class Taxi extends PublicTransport {
             distance =0;
             destination="";
             setFare(0);
+            setSpeed(0);
 
            if(getState().equals("운행중")) setState("일반");
         }else{

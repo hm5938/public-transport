@@ -35,8 +35,8 @@ public class Bus extends PublicTransport {
                         "\n---------------------------";
         System.out.println(str[i]);
     }
-
-    public void ChangeState() {
+    @Override
+    public void changeState() {
         if (getState().equals("운행")) {
             setState("차고지행");
            setPassenger(0);
@@ -64,7 +64,7 @@ public class Bus extends PublicTransport {
         if(getFuel_volume()+volume>=0){
             setFuel_volume(getFuel_volume()+volume);
             if(getFuel_volume()<10){
-                if(getState().equals("운행"))ChangeState();
+                if(getState().equals("운행"))changeState();
                 print(INFO_FARE);
                 alert("주유가 필요합니다.");
             }else{

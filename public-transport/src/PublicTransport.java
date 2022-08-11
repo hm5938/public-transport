@@ -5,7 +5,6 @@ public abstract class PublicTransport {
     private int passenger=0;
     private double fuel_volume =100;
     private double speed =0;
-    //속도변경
     private int max_passenger =0;
     private double fare=0;
     private String state;
@@ -52,6 +51,10 @@ public abstract class PublicTransport {
         this.fare = fare;
     }
 
+    public void changeSpeed(double speed){
+        setSpeed(getSpeed()+speed);
+    }
+    public abstract void changeState();
     public abstract void refuel(double volume);
     public abstract void print(int i);
     public void alert(String str){

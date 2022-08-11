@@ -14,11 +14,11 @@ public class Scenario {
         //3. **Bus**: 주유량 -50
         bus1.refuel(-50);
         //5. **Bus - 상태 변경** : 차고지행
-        bus1.ChangeState();
+        bus1.changeState();
         //6. **Bus**: 주유량 +10
         bus1.refuel(10);
         //8. **Bus -** **상태 변경**: 운행중
-        bus1.ChangeState();
+        bus1.changeState();
         //9. **Bus**: 승객 +45
         bus1.boarding(45);
         //11. **Bus**: 승객 +5
